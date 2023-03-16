@@ -1,23 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
-
+// 실제로 html의 body tag에 해당하는 내용. 실질적으로 웹사이트에 출력해주는 내용
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    // react에서는 jsx문법을 사용함. 그래서 class 뒤에 Name을 붙여야함.
+    <div className='gray-background'>
+      <img src={logo} lat='logo' />
+      <h2>Let's develop management system!</h2>
     </div>
   );
 }
