@@ -154,6 +154,29 @@ class App extends Component {
 ## 6강
 React에서는 bootstrap보다 Material UI가 더 선호 됨.
 
+**바뀐 Customer.js**
+```javascript
+import React from 'react';
+import { TableRow } from '@material-ui/core';
+import { TableCell } from '@material-ui/core';
+
+class Customer extends React.Component {
+    render() { 
+        return (
+            <TableRow>
+                <TableCell>{this.props.id}</TableCell>
+                <TableCell><img src={this.props.image} alt='profile' /></TableCell>
+                <TableCell>{this.props.name}</TableCell>
+                <TableCell>{this.props.birthday}</TableCell>
+                <TableCell>{this.props.gender}</TableCell>
+                <TableCell>{this.props.job}</TableCell>
+            </TableRow>
+        )
+    }
+}
+export default Customer;
+```
+
 **바뀐 App.js**
 ```javascript
 import { Component } from 'react';
@@ -246,6 +269,11 @@ class App extends Component {
 
 export default withStyles(styles)(App);
 ```
+
+## 7강
+6강까지의 내용은 서버와 클라이언트 중에서 클라이언트에 해당 됨.
+
+
 
 # Getting Started with Create React App
 
