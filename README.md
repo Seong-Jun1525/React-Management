@@ -272,6 +272,53 @@ export default withStyles(styles)(App);
 
 ## 7강
 6강까지의 내용은 서버와 클라이언트 중에서 클라이언트에 해당 됨.
+클라이언트와 서로 데이터를 주고받을 수 있는 API 역할을 수행하는 nodejs를 구축하는 것이 학습 목표.
+
+root 폴더에 client폴더를 만들고 지금까지 작업한 클라이언트 파일들을 넣어준다.
+그리고 package.json파일을 만들어서 서버와 클라이언트를 동시에 실행시킬 수 있도록 처리함.
+
+**package.json**
+```json
+{
+    "name": "management",
+    "version": "1.0.0",
+    "scripts": {
+        "client": "cd client && yarn start",
+        "server": "nodemon server.js",
+        "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+    },
+    "dependencies": {
+        "body-parser": "^1.20.2",
+        "express": "^4.18.2"
+    },
+    "devDependencies": {
+        "concurrently": "^7.6.0"
+    }
+}
+```
+
+**server.js**
+```javascript
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+const port = process.env.PORT || 5000;
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true | false}));
+
+app.get('/api/hello', (req, res) => {
+    res.send({message: 'Hello Express!'});
+});
+
+app.listen(port, () => console.log(`Listening on port ${port}`));
+```
+
+```
+터미널에서 node server.js를 입력하여 제대로 동작하는지 체크한다.
+이때 express나 body-parser 같은 module을 찾을 수 없다는 에러가 발생하면
+npm install 명령으로 다운받아야 한다.
+```
 
 
 
