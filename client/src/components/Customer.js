@@ -3,7 +3,7 @@ import { TableRow } from '@material-ui/core';
 import { TableCell } from '@material-ui/core';
 
 class Customer extends React.Component { // React.Component 라이브러리이자 일종의 class라고 할 수 있음
-    render() { 
+    render() { // render() 함수는 출력될 내용을 return하는 형태로 작성해야함
         return (
             // <div>
             //     {/* jsx문법의 특징은 기본적으로 내부 데이터가 2개 이상인 경우
