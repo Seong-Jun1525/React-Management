@@ -518,3 +518,78 @@ react 컴포넌트가 구성되면 customers는 비어있는 상태이다.
 네트워크의 속도가 빠르더라도 비어있는 상태로 시작.
 그래서 customers값이 존재하는 경우만 실행 될 수 있는 형태로 코딩해야함.
 ```
+
+## 9강
+```
+React 라이브러리가 실행되는 순서
+1) constructor() 불러옴
+
+(컴포넌트가 Mount되기 전에)
+2) componentWillMount() 함수가 불러와짐
+
+3) render() 실제 컴포넌트가 화면에 그려짐
+
+4) 이후에 componentDidMount() 함수가 불러와짐
+
+props or state 변동되는 경우 => shouldComponentUpdate() 사용이 되어서
+다시 render()함수를 불러서 view를 갱신 함.
+
+비동기적으로 호출이 이루어지기 때문에 api서버에서 응답을 하지 않으면
+사용자에게 로딩 화면만 출력이 되도록 설정해야 함.
+```
+
+**App.js**
+```javascript
+state = {
+    customers: "",
+    completed: 0
+  }
+
+  componentDidMount() { // api 서버에 접근을 해서 데이터를 받아오는 작업
+    this.timer = setInterval(this.progress, 20);
+    // 0.02초마다 한번씩 progress 함수가 실행될 수 있도록 설정
+    this.callApi()
+    .then(res => this.setState({customers: res}))
+    .catch(err => console.log(err));
+  }
+
+  progress = () => {
+    // eslint-disable-next-line no-unused-vars
+    const { completed } = this.state;
+    this.setState({completed: completed => 100 ? 0 : completed + 1})
+  }
+
+  render() {
+    return (
+        <TableBody>
+          {
+            this.state.customers ? this.state.customers.map(c => {
+              return (
+                <Customer
+                  key={c.id}
+                  id={c.id}
+                  image={c.image}
+                  name={c.name}
+                  birthday={c.birthday}
+                  gender={c.gender}
+                  job={c.job}
+                />
+              )
+            }) :
+            <TableRow>
+              <TableCell colSpan={6} align='center'>
+                <CircularProgress className={classes.progress} variant="indeterminate" value={this.state.completed} />
+              </TableCell>
+            </TableRow>
+          }
+        </TableBody>
+    );
+  }
+```
+네트워크 속도 때문에 progress bar를 확인을 못하는 경우
+```javascript
+this.callApi()
+    .then(res => this.setState({customers: res}))
+    .catch(err => console.log(err));
+```
+이 부분을 아예 주석처리하면 된다.
