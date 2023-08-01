@@ -593,3 +593,89 @@ this.callApi()
     .catch(err => console.log(err));
 ```
 이 부분을 아예 주석처리하면 된다.
+
+나는
+```bash
+'completed' is assigned a value but never used  no-unused-vars
+```
+와 같은 warning 메시지가 떴는데 해결 방법은 해당 코드 앞에
+```
+eslint-disable-next-line no-unused-vars
+```
+와 같은 주석 메시지를 작성해주면 된다.
+
+
+## 10강
+AWS RDS를 이용하면 MySQL같은 관계형 DB를 쉽고 빠르게 구축할 수 있다.
+<a href="https://aws.amazon.com/ko/free/?trk=fa2d6ba3-df80-4d24-a453-bf30ad163af9&sc_channel=ps&ef_id=CjwKCAjwt52mBhB5EiwA05YKo4ssA5812oLXhxHbdRcg5Vb1-VhW7PImL0LKZBl3SkkdVF4qDzN4iBoC-4YQAvD_BwE:G:s&s_kwcid=AL!4422!3!563761819834!e!!g!!aws!15286221779!129400439466&all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=*all&awsf.Free%20Tier%20Categories=*all">AWS SITE</a>에 들어가서 회원가입 후 RDS를 이용할 수 있다.
+
+데이터베이스에 접속할 수 있게 해주는 프로그램: <a href="https://www.heidisql.com/download.php">heidisql</a>
+
+인바운드 규칙 편집할 때 적용이 안되는 경우 기존 인바운드 규칙을 삭제하고 새로 생성해야지 적용이 된다.
+
+## 11강
+**고객 DB TABLE 구축!**
+```sql
+USE management;
+
+CREATE TABLE customer (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	image VARCHAR(1024),
+	name VARCHAR(64),
+	birthday VARCHAR(64),
+	gender VARCHAR(64),
+	job VARCHAR(64)
+) DEFAULT CHARACTER SET UTF8 COLLATE UTF8_GENERAL_CI;
+```
+`이때 주의해야 할게 name이 소문자여야 한다. 대문자면 나중에 웹사이트 화면에 이름이 출력이 안된다.`
+
+**고객 데이터 넣기**
+```sql
+USE management;
+INSERT INTO customer VALUES (1, 'https://picsum.photos/id/1/64/64', '홍길동', '000111', '남자', '대학생');
+INSERT INTO customer VALUES (2, 'https://picsum.photos/id/2/64/64', '임꺽정', '020415', '남자', '프로그래머');
+INSERT INTO customer VALUES (3, 'https://picsum.photos/id/3/64/64', '각시탈', '030120', '여자', '디자이너');
+```
+
+**database.json**
+파일을 root폴더 밑에 생성 후 gitignore를 해준다.
+```json
+{
+    "host": 나의 데이터베이스 주소,
+    "user": 나의 마스터명,
+    "password": 나의 비밀번호,
+    "port": "3306",
+    "database": 나의 데이터베이스이름
+}
+```
+
+**mysql 라이브러리 설치**
+```bash
+npm install --save mysql
+```
+**server.js 아래 부분 추가 및 수정**
+```javascript
+const fs = require('fs');
+
+const data = fs.readFileSync('./database.json');
+const conf = JSON.parse(data);
+const mysql = require('mysql');
+
+const connection = mysql.createConnection({
+    host: conf.host,
+    user: conf.user,
+    password: conf.password,
+    port: conf.port,
+    database: conf.database
+});
+connection.connect();
+
+app.get('/api/customers', (req, res) => {
+    connection.query(
+        "select * from customer",
+        (err, rows, fields) => {
+            res.send(rows);
+        }
+    );
+});
+```
