@@ -1,6 +1,7 @@
 import React from 'react';
 import { TableRow } from '@material-ui/core';
 import { TableCell } from '@material-ui/core';
+import CustomerDelete from './CustomerDelete';
 
 class Customer extends React.Component { // React.Component 라이브러리이자 일종의 class라고 할 수 있음
     render() { // render() 함수는 출력될 내용을 return하는 형태로 작성해야함
@@ -18,6 +19,9 @@ class Customer extends React.Component { // React.Component 라이브러리이�
                 <TableCell>{this.props.birthday}</TableCell>
                 <TableCell>{this.props.gender}</TableCell>
                 <TableCell>{this.props.job}</TableCell>
+                <TableCell>
+                    <CustomerDelete stateRefresh={this.props.stateRefresh} id={this.props.id}/>
+                </TableCell>
             </TableRow>
         )
     }
